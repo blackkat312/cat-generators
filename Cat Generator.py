@@ -3,7 +3,7 @@ from random import randint, choice
 
 example_cat = {
     "sex": "",  # female or male
-    "gender": "",  # molly, tom, non-binary, any other
+    "gender": "",  # female, male, non-binary, any other
     "fur_length": [  # L (short), l (long)
         "",
         ""
@@ -38,7 +38,7 @@ example_cat = {
 }
 parent_1 = {
     "sex": "",  # female or male
-    "gender": "",  # molly, tom, non-binary, any other
+    "gender": "",  # female, male, non-binary, any other
     "fur_length": [  # L (short), l (long)
         "",
         ""
@@ -73,7 +73,7 @@ parent_1 = {
 }
 parent_2 = {
     "sex": "",  # female or male
-    "gender": "",  # molly, tom, non-binary, any other
+    "gender": "",  # female, male, non-binary, any other
     "fur_length": [  # L (short), l (long)
         "",
         ""
@@ -145,7 +145,12 @@ def appearance_string(cat, name="This cat"):
         gender_string = "tom"
         pronoun_gender = "male"
     else:
-        gender_string = f"{cat['gender']} cat"
+        if cat["gender"] in ["demigirl", "demiboy"]:
+            gender_string = cat["gender"]
+        else:
+            gender_string = f"{cat['gender']} cat"
+        gender_string = gender_string.replace("girl", "molly")
+        gender_string = gender_string.replace("boy", "tom")
         pronoun_gender = "other"
 
     #
@@ -434,7 +439,7 @@ def randomize_pelt(cat, sex=None, gender=None):
         "female": "male",
         "male": "female"
     }
-    nonbinary = "non-binary"
+    nonbinary = generate_nonbinary()
 
     # SEX AND GENDER
     if sex and sex in ["female", "male"]:
@@ -445,9 +450,9 @@ def randomize_pelt(cat, sex=None, gender=None):
         cat["gender"] = gender
     else:
         cat["gender"] = cat["sex"]
-        if randint(1, 25) == 1:
+        if randint(1, 15) == 1:
             cat["gender"] = choice([sex_to_trans_gender.get(cat["sex"]), sex_to_trans_gender.get(cat["sex"]),
-                                    nonbinary])
+                                    sex_to_trans_gender.get(cat["sex"]), nonbinary, nonbinary])
 
     # FUR LENGTH
     cat["fur_length"][0] = choice(types_of_fur_length)
@@ -511,42 +516,7 @@ def randomize_pelt(cat, sex=None, gender=None):
 def generate_kits(parent1=None, parent2=None, sex=None, gender=None):
     kit = {
         "sex": "",  # female or male
-        "gender": "",  # molly, tom, non-binary, any other
-        "fur_length": [  # L (short), l (long)
-            "",
-            ""
-        ],
-        "base_color": [  # bla (black), br (brown), gr (gray), blu (blue), si (silver)
-            "",
-            ""
-        ],
-        "ginger": [  # G (ginger), g (not ginger)
-            "",
-            ""
-        ],
-        "ginger_color": [  # gi (ginger), cr (cream), ye (yellow), ru (russet)
-            "",
-            ""
-        ],
-        "color_breakthrough": False,
-        "patterning": [  # P (patterned), p (not patterned)
-            "",
-            ""
-        ],
-        "pattern_type": [  # T (tabby), m (mottled)
-            "",
-            ""
-        ],
-        "white": [  # W (full white), ws (white), w (not white)
-            "",
-            ""
-        ],
-        "white_grade": "",  # sum of numbers || 0 - 1 = low, 2 - 4 = medium, 5 - 6 = high
-        "brightness": ""  # sum of numbers || 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
-    }
-    template = {
-        "sex": "",  # female or male
-        "gender": "",  # molly, tom, non-binary, any other
+        "gender": "",  # female, male, non-binary, any other
         "fur_length": [  # L (short), l (long)
             "",
             ""
@@ -580,14 +550,57 @@ def generate_kits(parent1=None, parent2=None, sex=None, gender=None):
         "brightness": ""  # sum of numbers || 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
     }
 
-    if not parent1 or parent1 is None or parent1 == {} or parent1 == template:
+    if not parent1 or parent1 is None or parent1 == {} or parent1 == kit:
         print("Oops! You forgot to input the first parent.")
     else:
-        if not parent2 or parent2 is None or parent2 == {} or parent2 == template:
-            parent2 = template.copy()
+        if not parent2 or parent2 is None or parent2 == {} or parent2 == kit:
+            parent2 = kit.copy()
             randomize_pelt(parent2)
 
         return kit
+
+
+# If you don't know the definitions of any of these, I recommend looking at the LGBTQIA+ Wiki!
+# https://lgbtqia.wiki/wiki/LGBTQIA%2B_Wiki
+def generate_nonbinary():
+    genderfluid = [
+        "genderfaer",
+        "genderfaunet",
+        "genderflor",
+        "genderfloren",
+        "genderflorer",
+        "genderfloret",  # hey it's me!
+        "genderfen"
+    ]
+    demigender = [
+        "demiagender",
+        "demineutrois",
+        "deminonbinary",
+        "demixenogender"
+    ]
+
+    if randint(1, 3) == 1:
+        return "non-binary"
+    else:
+        category = randint(1, 3)
+        if category == 1:
+            if randint(1, 3) == 1:
+                return "genderfluid"
+            else:
+                if randint(1, 5) <= 3:
+                    return choice(["genderfae", "genderfaun"])
+                else:
+                    return choice(genderfluid)
+        elif category == 2:
+            if randint(1, 5) <= 3:
+                return choice(["demigirl", "demiboy"])
+            else:
+                return choice(demigender)
+        else:  # category == 3
+            if randint(1, 5) <= 3:
+                return choice(["girlflux", "boyflux"])
+            else:
+                return "enbyflux"
 
 
 randomize_pelt(example_cat)
