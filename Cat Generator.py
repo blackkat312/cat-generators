@@ -2,8 +2,8 @@ import random
 from random import randint, choice
 
 example_cat = {
-    "sex": "",  # female or male
-    "gender": "",  # female, male, non-binary, any other
+    "sex": "",  # female, male
+    "gender": "",  # female, male, non-binary, anything
     "fur_length": [  # L (short), l (long)
         "",
         ""
@@ -37,8 +37,8 @@ example_cat = {
     "brightness": ""  # sum of numbers || 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
 }
 parent_1 = {
-    "sex": "",  # female or male
-    "gender": "",  # female, male, non-binary, any other
+    "sex": "",  # female, male
+    "gender": "",  # female, male, non-binary, anything
     "fur_length": [  # L (short), l (long)
         "",
         ""
@@ -72,8 +72,8 @@ parent_1 = {
     "brightness": ""  # sum of numbers || 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
 }
 parent_2 = {
-    "sex": "",  # female or male
-    "gender": "",  # female, male, non-binary, any other
+    "sex": "",  # female, male
+    "gender": "",  # female, male, non-binary, anything
     "fur_length": [  # L (short), l (long)
         "",
         ""
@@ -515,8 +515,8 @@ def randomize_pelt(cat, sex=None, gender=None):
 
 def generate_kits(parent1=None, parent2=None, sex=None, gender=None):
     kit = {
-        "sex": "",  # female or male
-        "gender": "",  # female, male, non-binary, any other
+        "sex": "",  # female, male
+        "gender": "",  # female, male, non-binary, anything
         "fur_length": [  # L (short), l (long)
             "",
             ""
@@ -603,5 +603,21 @@ def generate_nonbinary():
                 return "enbyflux"
 
 
+"""
+CONFIG
+All require example_cat. Don't remove it!
+
+randomize_pelt
+Optional: sex (female, male), gender (female, male, non-binary, anything)
+Example: randomize_pelt(example_cat, "male", "female")
+
+dict_translation
+Optional: alternate style of printing (True: more newlines; for pasting into other programs, False: less newlines;
+easier visibility)
+
+appearance_string
+Optional: name (anything)
+Example: appearance_string(example_cat, "Mothwing")
+"""
 randomize_pelt(example_cat)
 print(dict_translation(example_cat, False) + "\n" + appearance_string(example_cat))
