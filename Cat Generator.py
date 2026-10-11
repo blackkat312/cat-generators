@@ -107,6 +107,17 @@ parent_2 = {
     "brightness": ""  # sum of numbers || 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
 }
 
+# CONFIG
+alt_print = False  # Alternate style of printing (True: more newlines; for pasting into other programs, False: less
+# newlines; easier visibility)
+kitty = {
+    "sex": None,  # Forces a particular sex
+    "gender": None,  # Forces a particular gender
+    "name": None  # Uses kitty["name"] instead of "This cat"
+}
+generate_kit = False  # True: generates a kit, False: randomizes a cat
+parent_2_sex = None  # If parent_2 is an unmodified dict, you can set their sex here (opt.)
+
 
 def appearance_string(cat, name="This cat"):
     tabby_string = ""
@@ -513,8 +524,8 @@ def randomize_pelt(cat, sex=None, gender=None):
         cat["brightness"] += choice(polygenes)
 
 
-def generate_kits(parent1=None, parent2=None, sex=None, gender=None):
-    kit = {
+def generate_kits(cat, parent1=None, parent2=None, parent2_sex=None, sex=None, gender=None):
+    template = {
         "sex": "",  # female, male
         "gender": "",  # female, male, non-binary, anything
         "fur_length": [  # L (short), l (long)
@@ -550,14 +561,13 @@ def generate_kits(parent1=None, parent2=None, sex=None, gender=None):
         "brightness": ""  # sum of numbers || 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
     }
 
-    if not parent1 or parent1 is None or parent1 == {} or parent1 == kit:
+    if not parent1 or parent1 is None or parent1 == {} or parent1 == template:
         print("Oops! You forgot to input the first parent.")
     else:
-        if not parent2 or parent2 is None or parent2 == {} or parent2 == kit:
-            parent2 = kit.copy()
-            randomize_pelt(parent2)
-
-        return kit
+        if not parent2 or parent2 is None or parent2 == {} or parent2 == template:
+            parent2 = template.copy()
+            randomize_pelt(parent2, parent2_sex if parent2_sex is not None else choice(["female", "male"]))
+            print(dict_translation(parent2, alt_print) + "\n" + appearance_string(parent2))
 
 
 # If you don't know the definitions of any of these, I recommend looking at the LGBTQIA+ Wiki!
@@ -603,21 +613,10 @@ def generate_nonbinary():
                 return "enbyflux"
 
 
-"""
-CONFIG
-All require example_cat. Don't remove it!
-
-randomize_pelt
-Optional: sex (female, male), gender (female, male, non-binary, anything)
-Example: randomize_pelt(example_cat, "male", "female")
-
-dict_translation
-Optional: alternate style of printing (True: more newlines; for pasting into other programs, False: less newlines;
-easier visibility)
-
-appearance_string
-Optional: name (anything)
-Example: appearance_string(example_cat, "Mothwing")
-"""
-randomize_pelt(example_cat)
-print(dict_translation(example_cat, False) + "\n" + appearance_string(example_cat))
+if generate_kit:
+    generate_kits(example_cat, parent_1, parent_2, parent_2_sex, kitty["sex"], kitty["gender"])
+else:
+    randomize_pelt(example_cat, kitty["sex"], kitty["gender"])
+print(dict_translation(example_cat, alt_print) + "\n" + appearance_string(example_cat, (kitty["name"]
+                                                                                        if kitty["name"] is not None
+                                                                                        else "This cat")))
