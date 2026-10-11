@@ -73,6 +73,9 @@ non_local_suffixes = [
 
 # CONFIG
 special_suffix = ""  # kit, paw, star, ect., or leave blank
+# All prefixes/suffixes will be forced_prefix/suffix
+forced_prefix = ""
+forced_suffix = ""
 amount = 3
 exclude_non_local_names = False
 
@@ -92,8 +95,16 @@ for i in range(amount):
 
     chosen_prefix = choice(prefixes)
     chosen_suffix = choice(suffixes)
-    while chosen_suffix == chosen_prefix.lower():
-        chosen_suffix = choice(suffixes)
+
+    if forced_prefix != "":
+        chosen_prefix = forced_prefix
+    if forced_suffix != "":
+        chosen_suffix = forced_suffix
+        while chosen_prefix.lower() == chosen_suffix:
+            chosen_prefix = choice(prefixes)
+    else:
+        while chosen_suffix == chosen_prefix.lower():
+            chosen_suffix = choice(suffixes)
 
     if special_suffix != "":
         print(f"Hello! My name is {chosen_prefix}{special_suffix} (-{chosen_suffix}).{nl}")
