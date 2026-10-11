@@ -10,7 +10,6 @@ Non-genetically accurate cat generator. Currently incomplete. TODO:
 * Program kit generator
 * Add eye colors (can't believe I forgot this)
 * Potentially add stuff like accessories??
-* Add in-file documentation
 ## Name Generator
 More details are inside its file. Complete.
 
