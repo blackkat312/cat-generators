@@ -8,7 +8,6 @@ All of Moss's various cat generators.
 ## Cat Generator
 Non-genetically accurate cat generator. Currently incomplete. TODO:
 * Program kit generator
-* Add more non-binary genders
 * Add eye colors (can't believe I forgot this)
 * Potentially add stuff like accessories??
 * Add in-file documentation
