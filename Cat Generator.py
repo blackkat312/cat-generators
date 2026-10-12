@@ -4,6 +4,13 @@ from random import randint, choice
 example_cat = {
     "sex": "",  # female, male
     "gender": "",  # female, male, non-binary, anything
+    "eye_color": {
+        # orange, amber, gold, yellow, hazel, yellow-green, green, blue-green, mint green, cyan, blue, indigo
+        "left_color": "",
+        "right_color": "",
+        "is_left_light": False,  # True (light), False (normal)
+        "is_right_light": False
+    },
     "fur_length": [  # L (short), l (long)
         "",
         ""
@@ -20,7 +27,7 @@ example_cat = {
         "",
         ""
     ],
-    "color_breakthrough": False,
+    "color_breakthrough": False,  # True, False
     "patterning": [  # P (patterned), p (not patterned)
         "",
         ""
@@ -39,6 +46,13 @@ example_cat = {
 parent_1 = {
     "sex": "",  # female, male
     "gender": "",  # female, male, non-binary, anything
+    "eye_color": {
+        # orange, amber, gold, yellow, hazel, yellow-green, green, blue-green, mint green, cyan, blue, indigo
+        "left_color": "",
+        "right_color": "",
+        "is_left_light": False,  # True, False
+        "is_right_light": False
+    },
     "fur_length": [  # L (short), l (long)
         "",
         ""
@@ -55,7 +69,7 @@ parent_1 = {
         "",
         ""
     ],
-    "color_breakthrough": False,
+    "color_breakthrough": False,  # True, False
     "patterning": [  # P (patterned), p (not patterned)
         "",
         ""
@@ -74,6 +88,13 @@ parent_1 = {
 parent_2 = {
     "sex": "",  # female, male
     "gender": "",  # female, male, non-binary, anything
+    "eye_color": {
+        # orange, amber, gold, yellow, hazel, yellow-green, green, blue-green, mint green, cyan, blue, indigo
+        "left_color": "",
+        "right_color": "",
+        "is_left_light": False,  # True, False
+        "is_right_light": False
+    },
     "fur_length": [  # L (short), l (long)
         "",
         ""
@@ -90,7 +111,7 @@ parent_2 = {
         "",
         ""
     ],
-    "color_breakthrough": False,
+    "color_breakthrough": False,  # True, False
     "patterning": [  # P (patterned), p (not patterned)
         "",
         ""
@@ -121,7 +142,8 @@ parent_2_sex = None  # If parent_2 is an unmodified dict, you can set their sex 
 
 def appearance_string(cat, name="This cat"):
     tabby_string = ""
-    white_string = " with a "
+    with_string = " with "
+    withs = []
     gender_to_pronouns = {
         "female": {
             "subject": "she",
@@ -275,8 +297,40 @@ def appearance_string(cat, name="This cat"):
     if "W" in cat["white"]:
         color_string = "white"
         tabby_string = ""
-        white_string = ""
+
+    #
+
+    eye_to_string = {
+        "gold": "golden",
+        "yellow-green": "yellowish-green",
+        "blue-green": "bluish-green",
+        "mint green": "minty-green"
+    }
+    if cat["eye_color"]["left_color"] in eye_to_string:
+        left_eye = eye_to_string.get(cat["eye_color"]["left_color"])
     else:
+        left_eye = cat["eye_color"]["left_color"]
+    left_light_string = "light "
+    if left_eye in ["orange", "golden", "bluish-green", "minty-green", "indigo"]:
+        left_light_string = "pale "
+
+    if cat["eye_color"]["left_color"] == cat["eye_color"]["right_color"]:
+        withs.append(f"{left_light_string if cat['eye_color']['is_left_light'] is True else ''}{left_eye} eyes")
+    else:
+        if cat["eye_color"]["right_color"] in eye_to_string:
+            right_eye = eye_to_string.get(cat["eye_color"]["right_color"])
+        else:
+            right_eye = cat["eye_color"]["right_color"]
+        right_light_string = "light "
+        if right_eye in ["orange", "golden", "bluish-green", "minty-green", "indigo"]:
+            right_light_string = "pale "
+
+        withs.append(f"one {left_light_string if cat['eye_color']['is_left_light'] is True else ''}{left_eye} eye")
+        withs.append(f"one {right_light_string if cat['eye_color']['is_right_light'] is True else ''}{right_eye} eye")
+
+    #
+
+    if "W" not in cat["white"] and "ws" in cat["white"]:
         grade_sum = 0
         for polygene in cat["white_grade"]:
             grade_sum += int(polygene)
@@ -287,30 +341,41 @@ def appearance_string(cat, name="This cat"):
         else:  # grade_sum in [5, 6]
             grade = "high"
 
-        if cat["white"][0] != "w":
-            if cat["white"][1] == "w":
-                if grade == "low":
-                    white_string += "low"
-                elif grade == "medium":
-                    white_string += "medium-low"
-                else:  # grade == "high"
-                    white_string += "medium"
-                    tabby_string = tabby_string.replace("tortie", "calico")
-            else:
+        white_string = "a "
+        if cat["white"][1] == "w":
+            if grade == "low":
+                white_string += "low"
+            elif grade == "medium":
+                white_string += "medium-low"
+            else:  # grade == "high"
+                white_string += "medium"
                 tabby_string = tabby_string.replace("tortie", "calico")
-                if grade == "low":
-                    white_string += "medium"
-                elif grade == "medium":
-                    white_string += "medium-high"
-                else:  # grade == "high"
-                    white_string += "high"
-            white_string += " amount of white"
         else:
-            white_string = ""
+            tabby_string = tabby_string.replace("tortie", "calico")
+            if grade == "low":
+                white_string += "medium"
+            elif grade == "medium":
+                white_string += "medium-high"
+            else:  # grade == "high"
+                white_string += "high"
+        white_string += " amount of white"
+        withs.append(white_string)
 
     #
 
-    return_string = f"{name} is a {fur_length_string}{color_string}{tabby_string} {gender_string}{white_string}."
+    if len(withs) < 1:
+        print("???")
+    elif len(withs) == 1:
+        with_string += withs[0]
+    elif len(withs) == 2:
+        with_string += withs[0] + " and " + withs[1]
+    elif len(withs) > 2:
+        with_string += ", ".join(withs[:-1])
+        with_string += ", and " + withs[-1]
+
+    #
+
+    return_string = f"{name} is a {fur_length_string}{color_string}{tabby_string} {gender_string}{with_string}."
 
     #
 
@@ -342,9 +407,26 @@ def dict_translation(cat, alt=False):
         brightness_string += int(polygene)
 
     if alt is True:
+        if cat["eye_color"]["left_color"] == cat["eye_color"]["right_color"]:
+            eye_color = f"Eye Color:\n{cat['eye_color']['left_color'].capitalize()}"
+        else:
+            eye_color = (
+                f"Left Eye Color:\n{cat['eye_color']['left_color'].capitalize()}\n\n"
+                f"Right Eye Color:\n{cat['eye_color']['right_color'].capitalize()}"
+            )
+        if cat["eye_color"]["is_left_light"] == cat["eye_color"]["is_right_light"]:
+            eye_lightness = f"Are Eyes Light?\n{cat['eye_color']['is_left_light']}"
+        else:
+            eye_lightness = (
+                f"Is Left Eye Light?\n{cat['eye_color']['is_left_light']}\n\n"
+                f"Is Right Eye Light?\n{cat['eye_color']['is_right_light']}"
+            )
+
         return (
             f"Sex:\n{cat['sex'].capitalize()}\n\n"
             f"Gender:\n{cat['gender'].capitalize()}\n\n"
+            f"{eye_color}\n\n"
+            f"{eye_lightness}\n\n"
             f"Fur Length:\n{cat['fur_length'][0]}, {cat['fur_length'][1]}\n\n"
             f"Base Color:\n{cat['base_color'][0]}, {cat['base_color'][1]}\n\n"
             f"Ginger-ness:\n{cat['ginger'][0]}, {cat['ginger'][1]}\n\n"
@@ -357,9 +439,26 @@ def dict_translation(cat, alt=False):
             f"Brightness:\n{cat['brightness']} - {str(brightness_string)}\n"
         )
     else:
-        return (
+        if cat["eye_color"]["left_color"] == cat["eye_color"]["right_color"]:
+            eye_color = f"Eye Color: {cat['eye_color']['left_color']}"
+        else:
+            eye_color = (
+                f"Left Eye Color: {cat['eye_color']['left_color']}\n"
+                f"Right Eye Color: {cat['eye_color']['right_color']}"
+            )
+        if cat["eye_color"]["is_left_light"] == cat["eye_color"]["is_right_light"]:
+            eye_lightness = f"Are Eyes Light? {cat['eye_color']['is_left_light']}"
+        else:
+            eye_lightness = (
+                f"Is Left Eye Light? {cat['eye_color']['is_left_light']}\n"
+                f"Is Right Eye Light? {cat['eye_color']['is_right_light']}"
+            )
+
+        return_string = (
             f"Sex: {cat['sex']}\n"
             f"Gender: {cat['gender']}\n"
+            f"{eye_color}\n"
+            f"{eye_lightness}\n"
             f"Fur Length: [{cat['fur_length'][0]}, {cat['fur_length'][1]}]\n"
             f"Base Color: [{cat['base_color'][0]}, {cat['base_color'][1]}]\n"
             f"Ginger-ness: [{cat['ginger'][0]}, {cat['ginger'][1]}]\n"
@@ -371,6 +470,12 @@ def dict_translation(cat, alt=False):
             f"White Grade: {cat['white_grade']} - {str(white_grade_string)}\n"
             f"Brightness: {cat['brightness']} - {str(brightness_string)}\n"
         )
+        return_string = return_string.replace("? True", "? Yes")
+        return_string = return_string.replace("? False", "? No")
+        return_string = return_string.replace(": True", ": yes")
+        return_string = return_string.replace(": False", ": no")
+
+        return return_string
 
 
 def randomize_pelt(cat, sex=None, gender=None):
@@ -523,11 +628,21 @@ def randomize_pelt(cat, sex=None, gender=None):
         cat["white_grade"] += choice(polygenes)
         cat["brightness"] += choice(polygenes)
 
+    # EYE COLOR (last, due to white generation)
+    generate_eye_color(cat)
+
 
 def generate_kits(cat, parent1=None, parent2=None, parent2_sex=None, sex=None, gender=None):
     template = {
         "sex": "",  # female, male
         "gender": "",  # female, male, non-binary, anything
+        "eye_color": {
+            # orange, amber, gold, yellow, hazel, yellow-green, green, blue-green, mint green, cyan, blue, indigo
+            "left_color": "",
+            "right_color": "",
+            "is_left_light": False,  # True, False
+            "is_right_light": False
+        },
         "fur_length": [  # L (short), l (long)
             "",
             ""
@@ -544,7 +659,7 @@ def generate_kits(cat, parent1=None, parent2=None, parent2_sex=None, sex=None, g
             "",
             ""
         ],
-        "color_breakthrough": False,
+        "color_breakthrough": False,  # True, False
         "patterning": [  # P (patterned), p (not patterned)
             "",
             ""
@@ -611,6 +726,92 @@ def generate_nonbinary():
                 return choice(["girlflux", "boyflux"])
             else:
                 return "enbyflux"
+
+
+def generate_eye_color(cat):
+    types_of_eye_color = {
+        "orange": [
+            "orange",
+            "amber",
+            "gold"
+        ],
+        "yellow": [
+            "yellow",
+            "hazel",
+            "yellow-green"
+        ],
+        "green": [
+            "green",
+            "blue-green",
+            "mint green"
+        ],
+        "blue": [
+            "cyan",
+            "blue",
+            "indigo"
+        ]
+    }
+    types_of_eye_lightness = [
+        True,
+        False,
+        False
+    ]
+
+    if "W" in cat["white"]:
+        chance_of_blue = 2
+        chance_of_odd = 4
+    else:
+        grade_sum = 0
+        for polygene in cat["white_grade"]:
+            grade_sum += int(polygene)
+        if grade_sum in [0, 1]:
+            grade = "low"
+        elif grade_sum in [2, 3, 4]:
+            grade = "medium"
+        else:  # grade_sum in [5, 6]
+            grade = "high"
+
+        chance_of_odd = 67
+        if cat["white"][0] != "w":
+            if cat["white"][1] == "w":
+                if grade == "low":
+                    chance_of_blue = 17
+                elif grade == "medium":
+                    chance_of_blue = 15
+                else:  # grade == "high"
+                    chance_of_blue = 12
+                    chance_of_odd = 10
+            else:
+                if grade == "low":
+                    chance_of_blue = 11
+                    chance_of_odd = 9
+                elif grade == "medium":
+                    chance_of_blue = 6
+                    chance_of_odd = 5
+                else:  # grade == "high"
+                    chance_of_blue = 4
+                    chance_of_odd = 3
+        else:
+            chance_of_blue = 20
+
+    pool = ["orange", "orange", "yellow", "yellow", "yellow", "green"]
+    if randint(1, chance_of_blue) == 1:
+        cat["eye_color"]["left_color"] = choice(types_of_eye_color["blue"])
+        cat["eye_color"]["right_color"] = cat["eye_color"]["left_color"]
+        if chance_of_odd != 67 and randint(1, chance_of_odd) == 1:
+            if randint(1, 2) == 1:
+                cat["eye_color"]["left_color"] = choice(types_of_eye_color[choice(pool)])
+            else:
+                cat["eye_color"]["right_color"] = choice(types_of_eye_color[choice(pool)])
+    else:
+        cat["eye_color"]["left_color"] = choice(types_of_eye_color[choice(pool)])
+        cat["eye_color"]["right_color"] = cat["eye_color"]["left_color"]
+
+    cat["eye_color"]["is_left_light"] = choice(types_of_eye_lightness)
+    if cat["eye_color"]["left_color"] != cat["eye_color"]["right_color"] and randint(1, 2) == 1:
+        cat["eye_color"]["is_right_light"] = choice(types_of_eye_lightness)
+    else:
+        cat["eye_color"]["is_right_light"] = cat["eye_color"]["is_left_light"]
 
 
 if generate_kit:
