@@ -1,5 +1,6 @@
 import random
 from random import randint, choice
+from statistics import mean
 
 example_cat = {
     "sex": "",  # female, male
@@ -40,8 +41,8 @@ example_cat = {
         "",
         ""
     ],
-    "white_grade": "",  # sum of numbers || 0 - 1 = low, 2 - 4 = medium, 5 - 6 = high
-    "brightness": ""  # sum of numbers || 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
+    "white_grade": "",  # three numbers || sum: 0 - 1 = low, 2 - 4 = medium, 5 - 6 = high
+    "brightness": ""  # three numbers || sum: 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
 }
 parent_1 = {
     "sex": "",  # female, male
@@ -50,7 +51,7 @@ parent_1 = {
         # orange, amber, gold, yellow, hazel, yellow-green, green, blue-green, mint green, cyan, blue, indigo
         "left_color": "",
         "right_color": "",
-        "is_left_light": False,  # True, False
+        "is_left_light": False,  # True (light), False (normal)
         "is_right_light": False
     },
     "fur_length": [  # L (short), l (long)
@@ -82,8 +83,8 @@ parent_1 = {
         "",
         ""
     ],
-    "white_grade": "",  # sum of numbers || 0 - 1 = low, 2 - 4 = medium, 5 - 6 = high
-    "brightness": ""  # sum of numbers || 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
+    "white_grade": "",  # three numbers || sum: 0 - 1 = low, 2 - 4 = medium, 5 - 6 = high
+    "brightness": ""  # three numbers || sum: 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
 }
 parent_2 = {
     "sex": "",  # female, male
@@ -92,7 +93,7 @@ parent_2 = {
         # orange, amber, gold, yellow, hazel, yellow-green, green, blue-green, mint green, cyan, blue, indigo
         "left_color": "",
         "right_color": "",
-        "is_left_light": False,  # True, False
+        "is_left_light": False,  # True (light), False (normal)
         "is_right_light": False
     },
     "fur_length": [  # L (short), l (long)
@@ -124,8 +125,8 @@ parent_2 = {
         "",
         ""
     ],
-    "white_grade": "",  # sum of numbers || 0 - 1 = low, 2 - 4 = medium, 5 - 6 = high
-    "brightness": ""  # sum of numbers || 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
+    "white_grade": "",  # three numbers || sum: 0 - 1 = low, 2 - 4 = medium, 5 - 6 = high
+    "brightness": ""  # three numbers || sum: 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
 }
 
 # CONFIG
@@ -589,8 +590,13 @@ def randomize_pelt(cat, sex=None, gender=None):
     cat["ginger"][1] = choice(types_of_ginger)
     cat["ginger"].sort()
 
-    if cat["sex"] == "male" and cat["ginger"] == ["G", "g"] and randint(1, 20) != 1:
-        cat["ginger"] = choice([["g", "g"], ["G", "G"]])
+    if randint(1, 20) != 1:
+        tries = 0
+        while cat["sex"] == "male" and cat["ginger"] == ["G", "g"] and tries <= 25:
+            cat["ginger"][0] = choice(types_of_ginger)
+            cat["ginger"][1] = choice(types_of_ginger)
+            cat["ginger"].sort()
+            tries += 1
 
     # GINGER COLOR
     cat["ginger_color"][0] = choice(types_of_ginger_color)
@@ -640,7 +646,7 @@ def generate_kits(cat, parent1=None, parent2=None, parent2_sex=None, sex=None, g
             # orange, amber, gold, yellow, hazel, yellow-green, green, blue-green, mint green, cyan, blue, indigo
             "left_color": "",
             "right_color": "",
-            "is_left_light": False,  # True, False
+            "is_left_light": False,  # True (light), False (normal)
             "is_right_light": False
         },
         "fur_length": [  # L (short), l (long)
@@ -672,17 +678,294 @@ def generate_kits(cat, parent1=None, parent2=None, parent2_sex=None, sex=None, g
             "",
             ""
         ],
-        "white_grade": "",  # sum of numbers || 0 - 1 = low, 2 - 4 = medium, 5 - 6 = high
-        "brightness": ""  # sum of numbers || 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
+        "white_grade": "",  # three numbers || sum: 0 - 1 = low, 2 - 4 = medium, 5 - 6 = high
+        "brightness": ""  # three numbers || sum: 0 - 1 = dark, 2 - 4 = medium, 5 - 6 = light
     }
+    types_of_color_breakthrough = [
+        True,
+        True,
+        False,
+        False,
+        False
+    ]
+    sex_to_trans_gender = {
+        "female": "male",
+        "male": "female"
+    }
+    nonbinary = generate_nonbinary()
 
     if not parent1 or parent1 is None or parent1 == {} or parent1 == template:
         print("Oops! You forgot to input the first parent.")
     else:
+        print("PARENT 1")
+        print(dict_translation(parent1, alt_print) + "\n" + appearance_string(parent1))
+
         if not parent2 or parent2 is None or parent2 == {} or parent2 == template:
             parent2 = template.copy()
             randomize_pelt(parent2, parent2_sex if parent2_sex is not None else choice(["female", "male"]))
-            print(dict_translation(parent2, alt_print) + "\n" + appearance_string(parent2))
+        print("\n\nPARENT 2")
+        print(dict_translation(parent2, alt_print) + "\n" + appearance_string(parent2))
+
+        for i in range(0, 2):
+            if parent1["base_color"][i] == "bla":
+                parent1["base_color"][i] = "1bla"
+            if parent1["base_color"][i] == "br":
+                parent1["base_color"][i] = "2br"
+            if parent1["base_color"][i] == "gr":
+                parent1["base_color"][i] = "3gr"
+            if parent1["base_color"][i] == "blu":
+                parent1["base_color"][i] = "4blu"
+            if parent1["base_color"][i] == "si":
+                parent1["base_color"][i] = "5si"
+            if parent1["ginger_color"][i] == "gi":
+                parent1["ginger_color"][i] = "1gi"
+            if parent1["ginger_color"][i] == "cr":
+                parent1["ginger_color"][i] = "2cr"
+            if parent1["ginger_color"][i] == "ye":
+                parent1["ginger_color"][i] = "3ye"
+            if parent1["ginger_color"][i] == "ru":
+                parent1["ginger_color"][i] = "4ru"
+            if parent1["white"][i] == "W":
+                parent1["white"][i] = "1W"
+            if parent1["white"][i] == "ws":
+                parent1["white"][i] = "2ws"
+            if parent1["white"][i] == "w":
+                parent1["white"][i] = "3w"
+
+            if parent2["base_color"][i] == "bla":
+                parent2["base_color"][i] = "1bla"
+            if parent2["base_color"][i] == "br":
+                parent2["base_color"][i] = "2br"
+            if parent2["base_color"][i] == "gr":
+                parent2["base_color"][i] = "3gr"
+            if parent2["base_color"][i] == "blu":
+                parent2["base_color"][i] = "4blu"
+            if parent2["base_color"][i] == "si":
+                parent2["base_color"][i] = "5si"
+            if parent2["ginger_color"][i] == "gi":
+                parent2["ginger_color"][i] = "1gi"
+            if parent2["ginger_color"][i] == "cr":
+                parent2["ginger_color"][i] = "2cr"
+            if parent2["ginger_color"][i] == "ye":
+                parent2["ginger_color"][i] = "3ye"
+            if parent2["ginger_color"][i] == "ru":
+                parent2["ginger_color"][i] = "4ru"
+            if parent2["white"][i] == "W":
+                parent2["white"][i] = "1W"
+            if parent2["white"][i] == "ws":
+                parent2["white"][i] = "2ws"
+            if parent2["white"][i] == "w":
+                parent2["white"][i] = "3w"
+
+        # SEX AND GENDER
+        if sex and sex in ["female", "male"]:
+            cat["sex"] = sex
+        else:
+            cat["sex"] = choice(["female", "male"])
+        if gender and gender is not None and gender != "":
+            cat["gender"] = gender
+        else:
+            cat["gender"] = cat["sex"]
+            if randint(1, 15) == 1:
+                cat["gender"] = choice([sex_to_trans_gender.get(cat["sex"]), sex_to_trans_gender.get(cat["sex"]),
+                                        sex_to_trans_gender.get(cat["sex"]), nonbinary, nonbinary])
+
+        # FUR LENGTH
+        cat["fur_length"] = [choice([parent1["fur_length"][0], parent1["fur_length"][1]]),
+                             choice([parent2["fur_length"][0], parent2["fur_length"][1]])]
+        cat["fur_length"].sort()
+
+        # BASE COLOR
+        cat["base_color"] = [choice([parent1["base_color"][0], parent1["base_color"][1]]),
+                             choice([parent2["base_color"][0], parent2["base_color"][1]])]
+        cat["base_color"].sort()
+        temp = cat["base_color"][0]
+        cat["base_color"][0] = temp[1:]
+        temp = cat["base_color"][1]
+        cat["base_color"][1] = temp[1:]
+
+        # GINGER-NESS
+        cat["ginger"] = [choice([parent1["ginger"][0], parent1["ginger"][1]]),
+                         choice([parent2["ginger"][0], parent2["ginger"][1]])]
+        cat["ginger"].sort()
+
+        if not (
+                (parent1["ginger"] == ["G", "G"] and parent2["ginger"] == ["g", "g"]) or
+                (parent1["ginger"] == ["g", "g"] and parent2["ginger"] == ["G", "G"])
+        ) and randint(1, 20) != 1:
+            tries = 0
+            while cat["sex"] == "male" and cat["ginger"] == ["G", "g"] and tries <= 25:
+                cat["ginger"] = [choice([parent1["ginger"][0], parent1["ginger"][1]]),
+                                 choice([parent2["ginger"][0], parent2["ginger"][1]])]
+                cat["ginger"].sort()
+                tries += 1
+
+        # GINGER COLOR
+        cat["ginger_color"] = [choice([parent1["ginger_color"][0], parent1["ginger_color"][1]]),
+                               choice([parent2["ginger_color"][0], parent2["ginger_color"][1]])]
+        cat["ginger_color"].sort()
+        temp = cat["ginger_color"][0]
+        cat["ginger_color"][0] = temp[1:]
+        temp = cat["ginger_color"][1]
+        cat["ginger_color"][1] = temp[1:]
+
+        # COLOR BREAKTHROUGH
+        if randint(1, 4) != 1:
+            cat["color_breakthrough"] = choice([parent1["color_breakthrough"], parent2["color_breakthrough"]])
+        else:
+            cat["color_breakthrough"] = choice(types_of_color_breakthrough)
+
+        # PATTERNING
+        cat["patterning"] = [choice([parent1["patterning"][0], parent1["patterning"][1]]),
+                             choice([parent2["patterning"][0], parent2["patterning"][1]])]
+        cat["patterning"].sort()
+
+        # PATTERN TYPE
+        cat["pattern_type"] = [choice([parent1["pattern_type"][0], parent1["pattern_type"][1]]),
+                               choice([parent2["pattern_type"][0], parent2["pattern_type"][1]])]
+        cat["pattern_type"].sort()
+
+        # WHITE
+        cat["white"] = [choice([parent1["white"][0], parent1["white"][1]]),
+                        choice([parent2["white"][0], parent2["white"][1]])]
+        cat["white"].sort()
+        temp = cat["white"][0]
+        cat["white"][0] = temp[1:]
+        temp = cat["white"][1]
+        cat["white"][1] = temp[1:]
+
+        # POLYGENETIC WHITE GRADE
+        first_skipped = False
+        second_skipped = False
+        poly_sum = 0
+        inheritance_method = randint(1, 100)
+        parent1_or_2 = randint(1, 2)
+        adding = choice([True, False])
+        num = 2 if randint(1, 15) == 1 else 1
+
+        parent1_white = 0
+        for polygene in parent1["white_grade"]:
+            parent1_white += int(polygene)
+        parent2_white = 0
+        for polygene in parent2["white_grade"]:
+            parent2_white += int(polygene)
+
+        # More or less (30%)
+        if 1 <= inheritance_method <= 30:
+            if parent1_or_2 == 1:
+                if adding is True and ((parent1_white < 6 and num == 1) or (parent1_white < 5 and num == 2)):
+                    poly_sum = parent1_white + num
+                elif adding is False and ((parent1_white > 0 and num == 1) or (parent1_white > 1 and num == 2)):
+                    poly_sum = parent1_white - num
+                else:
+                    first_skipped = True
+                    parent1_or_2 = 2
+            else:
+                first_skipped = True
+            if parent1_or_2 == 2:
+                if adding is True and ((parent2_white < 6 and num == 1) or (parent2_white < 5 and num == 2)):
+                    poly_sum = parent2_white + num
+                elif adding is False and ((parent2_white > 0 and num == 1) or (parent2_white > 1 and num == 2)):
+                    poly_sum = parent2_white - num
+                else:
+                    second_skipped = True
+            else:
+                second_skipped = True
+
+            if first_skipped and second_skipped:
+                inheritance_method = randint(31, 100)
+
+        # Direct inheritance (35%)
+        if 31 <= inheritance_method <= 65:
+            if randint(1, 2) == 1:
+                poly_sum = parent1_white
+            else:
+                poly_sum = parent2_white
+
+        # Mean (35%)
+        if 66 <= inheritance_method <= 100:
+            poly_sum = int(mean([parent1_white, parent2_white]))
+
+        polygenes = ""
+        temp_poly_sum = 67
+
+        while temp_poly_sum != poly_sum:
+            if temp_poly_sum != poly_sum:
+                polygenes = ""
+                temp_poly_sum = 0
+            for gene in range(0, 3):
+                polygenes += choice(["2", "1", "0"])
+                temp_poly_sum += int(polygenes[gene])
+
+        cat["white_grade"] = polygenes
+
+        # POLYGENETIC BRIGHTNESS VARIATION
+        first_skipped = False
+        second_skipped = False
+        poly_sum = 0
+        inheritance_method = randint(1, 100)
+        parent1_or_2 = randint(1, 2)
+        adding = choice([True, False])
+        num = 2 if randint(1, 15) == 1 else 1
+
+        parent1_bright = 0
+        for polygene in parent1["brightness"]:
+            parent1_bright += int(polygene)
+        parent2_bright = 0
+        for polygene in parent2["brightness"]:
+            parent2_bright += int(polygene)
+
+        # More or less (30%)
+        if 1 <= inheritance_method <= 30:
+            if parent1_or_2 == 1:
+                if adding is True and ((parent1_bright < 6 and num == 1) or (parent1_bright < 5 and num == 2)):
+                    poly_sum = parent1_bright + num
+                elif adding is False and ((parent1_bright > 0 and num == 1) or (parent1_bright > 1 and num == 2)):
+                    poly_sum = parent1_bright - num
+                else:
+                    first_skipped = True
+                    parent1_or_2 = 2
+            else:
+                first_skipped = True
+            if parent1_or_2 == 2:
+                if adding is True and ((parent2_bright < 6 and num == 1) or (parent2_bright < 5 and num == 2)):
+                    poly_sum = parent2_bright + num
+                elif adding is False and ((parent2_bright > 0 and num == 1) or (parent2_bright > 1 and num == 2)):
+                    poly_sum = parent2_bright - num
+                else:
+                    second_skipped = True
+            else:
+                second_skipped = True
+
+            if first_skipped and second_skipped:
+                inheritance_method = randint(31, 100)
+
+        # Direct inheritance (35%)
+        if 31 <= inheritance_method <= 65:
+            if randint(1, 2) == 1:
+                poly_sum = parent1_bright
+            else:
+                poly_sum = parent2_bright
+
+        # Mean (35%)
+        if 66 <= inheritance_method <= 100:
+            poly_sum = int(mean([parent1_bright, parent2_bright]))
+
+        polygenes = ""
+        temp_poly_sum = 67
+
+        while temp_poly_sum != poly_sum:
+            if temp_poly_sum != poly_sum:
+                polygenes = ""
+                temp_poly_sum = 0
+            for gene in range(0, 3):
+                polygenes += choice(["2", "1", "0"])
+                temp_poly_sum += int(polygenes[gene])
+
+        cat["brightness"] = polygenes
+
+        # EYE COLOR (last, due to white generation)
+        generate_eye_color(cat)
 
 
 # If you don't know the definitions of any of these, I recommend looking at the LGBTQIA+ Wiki!
@@ -816,6 +1099,7 @@ def generate_eye_color(cat):
 
 if generate_kit:
     generate_kits(example_cat, parent_1, parent_2, parent_2_sex, kitty["sex"], kitty["gender"])
+    print("\n\nKITTEN")
 else:
     randomize_pelt(example_cat, kitty["sex"], kitty["gender"])
 print(dict_translation(example_cat, alt_print) + "\n" + appearance_string(example_cat, (kitty["name"]
