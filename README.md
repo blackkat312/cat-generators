@@ -6,9 +6,8 @@ All of Moss's various cat generators.
 3. Please tell me if you find errors/bugs! /nf :3
 4. Have fun, or I will smite you!!!1!!1 /j
 ## Cat Generator
-Non-genetically accurate cat generator. Currently incomplete. TODO:
-* Program kit generator
-* Potentially add stuff like accessories??
+Non-genetically accurate cat generator. Complete. May add in the future:
+* Accessories?
 ## Name Generator
 More details are inside its file. Complete.
 
