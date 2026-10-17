@@ -63,7 +63,6 @@ suffixes = [
     "stream", "strike", "stripe", "swoop", "tail", "talon", "thistle", "thorn", "throat", "tip", "toe", "tooth", "tuft",
     "watcher", "water", "weed", "whisker", "whisper", "willow", "wind", "wing", "wish"
 ]
-# This is mainly just for myself - will apply to anyone else living in PA (and prob nearby states too) though
 non_local_prefixes = [
     "Adder", "Buzzard", "Fallow", "Ferret", "Furze", "Gorse", "Heather", "Kite", "Rook", "Sloe", "Thrift"
 ]
@@ -76,16 +75,39 @@ special_suffix = ""  # kit, paw, star, ect., or leave blank
 # All prefixes/suffixes will be forced_prefix/suffix
 forced_prefix = ""
 forced_suffix = ""
-amount = 3
-exclude_non_local_names = False
+no_double_letter = True  # No double-letter names (e.g., Mossstar, Oliveear, Hailleaf, etc.)
+amount = 3  # Amount of names to generate
+exclude_non_local_names = False  # This is mainly just for myself - will apply to anyone else living in PA (and prob
+# nearby states) though
 
 if exclude_non_local_names is True:
     for prefix in non_local_prefixes:
         if prefix in prefixes:
-            prefixes.remove(prefix)
+            while prefix in prefixes:
+                prefixes.remove(prefix)
     for suffix in non_local_suffixes:
         if suffix in suffixes:
-            suffixes.remove(suffix)
+            while suffix in suffixes:
+                suffixes.remove(suffix)
+
+if no_double_letter is True:
+    for prefix in prefixes:
+        removed = False
+        if special_suffix != "":
+            if prefix[-1] == special_suffix[0]:
+                while prefix in prefixes:
+                    prefixes.remove(prefix)
+                removed = True
+        if removed is False:
+            if forced_suffix != "":
+                if prefix[-1] == forced_suffix[0]:
+                    while prefix in prefixes:
+                        prefixes.remove(prefix)
+    for suffix in suffixes:
+        if forced_prefix != "":
+            if suffix[0] == forced_prefix[-1]:
+                while suffix in suffixes:
+                    suffixes.remove(suffix)
 
 for i in range(amount):
     if amount != 1:
@@ -100,10 +122,14 @@ for i in range(amount):
         chosen_prefix = forced_prefix
     if forced_suffix != "":
         chosen_suffix = forced_suffix
-        while chosen_prefix.lower() == chosen_suffix:
+        while chosen_prefix.lower() == chosen_suffix or (
+                no_double_letter is True and (chosen_prefix[-1] == chosen_suffix[0])
+        ):
             chosen_prefix = choice(prefixes)
     else:
-        while chosen_suffix == chosen_prefix.lower():
+        while chosen_suffix == chosen_prefix.lower() or (
+                no_double_letter is True and (chosen_prefix[-1] == chosen_suffix[0])
+        ):
             chosen_suffix = choice(suffixes)
 
     if special_suffix != "":
