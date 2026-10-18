@@ -408,20 +408,14 @@ def dict_translation(cat, alt=False):
         brightness_string += int(polygene)
 
     if alt is True:
-        if cat["eye_color"]["left_color"] == cat["eye_color"]["right_color"]:
-            eye_color = f"Eye Color:\n{cat['eye_color']['left_color'].capitalize()}"
-        else:
-            eye_color = (
-                f"Left Eye Color:\n{cat['eye_color']['left_color'].capitalize()}\n\n"
-                f"Right Eye Color:\n{cat['eye_color']['right_color'].capitalize()}"
-            )
-        if cat["eye_color"]["is_left_light"] == cat["eye_color"]["is_right_light"]:
-            eye_lightness = f"Are Eyes Light?\n{cat['eye_color']['is_left_light']}"
-        else:
-            eye_lightness = (
-                f"Is Left Eye Light?\n{cat['eye_color']['is_left_light']}\n\n"
-                f"Is Right Eye Light?\n{cat['eye_color']['is_right_light']}"
-            )
+        eye_color = (
+            f"Left Eye Color:\n{cat['eye_color']['left_color'].capitalize()}\n\n"
+            f"Right Eye Color:\n{cat['eye_color']['right_color'].capitalize()}"
+        )
+        eye_lightness = (
+            f"Is Left Eye Light?\n{cat['eye_color']['is_left_light']}\n\n"
+            f"Is Right Eye Light?\n{cat['eye_color']['is_right_light']}"
+        )
 
         return (
             f"Sex:\n{cat['sex'].capitalize()}\n\n"
