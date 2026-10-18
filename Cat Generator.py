@@ -9,7 +9,8 @@ example_cat = {
         # orange, amber, gold, yellow, hazel, yellow-green, green, blue-green, mint green, cyan, blue, indigo
         "left_color": "",
         "right_color": "",
-        "is_left_light": False,  # True (light), False (normal)
+        # True (light), False (normal)
+        "is_left_light": False,
         "is_right_light": False
     },
     "fur_length": [  # L (short), l (long)
@@ -51,7 +52,8 @@ parent_1 = {
         # orange, amber, gold, yellow, hazel, yellow-green, green, blue-green, mint green, cyan, blue, indigo
         "left_color": "",
         "right_color": "",
-        "is_left_light": False,  # True (light), False (normal)
+        # True (light), False (normal)
+        "is_left_light": False,
         "is_right_light": False
     },
     "fur_length": [  # L (short), l (long)
@@ -93,7 +95,8 @@ parent_2 = {
         # orange, amber, gold, yellow, hazel, yellow-green, green, blue-green, mint green, cyan, blue, indigo
         "left_color": "",
         "right_color": "",
-        "is_left_light": False,  # True (light), False (normal)
+        # True (light), False (normal)
+        "is_left_light": False,
         "is_right_light": False
     },
     "fur_length": [  # L (short), l (long)
@@ -640,7 +643,8 @@ def generate_kits(cat, parent1=None, parent2=None, parent2_sex=None, sex=None, g
             # orange, amber, gold, yellow, hazel, yellow-green, green, blue-green, mint green, cyan, blue, indigo
             "left_color": "",
             "right_color": "",
-            "is_left_light": False,  # True (light), False (normal)
+            # True (light), False (normal)
+            "is_left_light": False,
             "is_right_light": False
         },
         "fur_length": [  # L (short), l (long)
