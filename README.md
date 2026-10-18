@@ -2,7 +2,7 @@ All of Moss's various cat generators.
 ## ToS
 1. Feel free to make forks to your heart's desire!
     * Credit for the Name Generator is not required, however I'd heavily prefer credit for the Cat Generator (not if you use it for your characters, but if you make your own edits and share them elsewhere)!
-2. Tech support is not provided for running these programs. Please look up online how to run python files, if you don't know how!
+2. Tech support is not provided for running these programs. Please look up online how to run python files, if you don't know how to!
 3. Please tell me if you find errors/bugs! /nf :3
 4. Have fun, or I will smite you!!!1!!1 /j
 ## Cat Generator
