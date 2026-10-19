@@ -63,11 +63,43 @@ suffixes = [
     "stream", "strike", "stripe", "swoop", "tail", "talon", "thistle", "thorn", "throat", "tip", "toe", "tooth", "tuft",
     "watcher", "water", "weed", "whisker", "whisper", "willow", "wind", "wing", "wish"
 ]
-non_local_prefixes = [
+swap_able_prefixes = [
+    "Acorn", "Adder", "Alder", "Amber", "Ant", "Apple", "Ash", "Aspen", "Bark", "Bay", "Bee", "Beech", "Beetle",
+    "Berry", "Birch", "Bird", "Blizzard", "Bloom", "Blossom", "Boulder", "Bracken", "Bramble", "Branch", "Breeze",
+    "Briar", "Bright", "Brindle", "Bristle", "Brook", "Brush", "Bumble", "Buzzard", "Cedar", "Cherry", "Chive",
+    "Cinder", "Claw", "Cloud", "Clover", "Cone", "Copper", "Creek", "Crouch", "Crow", "Curl", "Cypress", "Daisy",
+    "Dandelion", "Dapple", "Dawn", "Deer", "Dew", "Doe", "Dove", "Dusk", "Dust", "Eagle", "Echo", "Eel", "Ember",
+    "Fallow", "Fawn", "Feather", "Fern", "Ferret", "Fidget", "Fin", "Finch", "Fir", "Fire", "Flame", "Flash", "Flax",
+    "Flicker", "Flint", "Flip", "Float", "Flower", "Fluff", "Flutter", "Fly", "Fog", "Fox", "Freckle", "Fringe", "Frog",
+    "Frond", "Frost", "Furze", "Gale", "Goose", "Gorse", "Grass", "Gravel", "Gull", "Gust", "Hail", "Hare", "Hatch",
+    "Haven", "Hawk", "Hazel", "Heather", "Heron", "Hickory", "Hollow", "Holly", "Honey", "Hoot", "Hop", "Hound", "Hunt",
+    "Ice", "Ivy", "Jay", "Juniper", "Kestrel", "Kite", "Lake", "Larch", "Lark", "Leaf", "Leap", "Leopard", "Lichen",
+    "Light", "Lightning", "Lily", "Lion", "Lizard", "Mallow", "Maple", "Marigold", "Marsh", "Meadow", "Midge", "Milk",
+    "Minnow", "Mint", "Mist", "Mistle", "Mole", "Moon", "Morning", "Moss", "Mouse", "Mud", "Mumble", "Myrtle", "Nectar",
+    "Needle", "Nettle", "Newt", "Night", "Nut", "Oak", "Oat", "Olive", "Otter", "Owl", "Parsley", "Patch", "Peak",
+    "Pear", "Pebble", "Perch", "Petal", "Pigeon", "Pike", "Pine", "Plum", "Pod", "Pool", "Poppy", "Pounce", "Prickle",
+    "Primrose", "Puddle", "Puff", "Quail", "Rabbit", "Rain", "Rapid", "Rat", "Raven", "Reed", "Ridge", "Ripple",
+    "Robin", "Rock", "Rook", "Root", "Rose", "Rowan", "Rush", "Russet", "Rustle", "Rye", "Sage", "Sand", "Scorch",
+    "Sedge", "Seed", "Shade", "Shell", "Shimmer", "Shine", "Shrew", "Sky", "Slate", "Sloe", "Smoke", "Snail", "Snake",
+    "Snap", "Snip", "Snow", "Song", "Soot", "Sorrel", "Spark", "Sparrow", "Speckle", "Spider", "Spike", "Splash",
+    "Spot", "Spruce", "Squirrel", "Stag", "Starling", "Stem", "Stoat", "Stone", "Storm", "Stream", "Stretch", "Strike",
+    "Stripe", "Sun", "Swallow", "Swift", "Talon", "Tangle", "Tansy", "Thistle", "Thorn", "Thrift", "Thrush", "Tiger",
+    "Timber", "Toad", "Trout", "Tumble", "Turtle", "Twig", "Vine", "Violet", "Vixen", "Vole", "Wasp", "Wave", "Weasel",
+    "Web", "Weed", "Whisker", "Whisper", "Whistle", "Whorl", "Willow", "Wind", "Wolf", "Wood", "Wren", "Yarrow"
+]
+swap_able_suffixes = [
+    "bark", "berry", "bird", "blaze", "bloom", "branch", "breeze", "briar", "bright", "brook", "brush", "burr", "bush",
+    "cloud", "creek", "curl", "dapple", "dawn", "drift", "dusk", "dust", "feather", "fern", "fire", "fish", "flame",
+    "flower", "frond", "frost", "gorse", "grass", "hawk", "haze", "leaf", "light", "mist", "moon", "morning", "mouse",
+    "petal", "pool", "poppy", "ripple", "seed", "shade", "sky", "snow", "speck", "speckle", "splash", "spot", "stem",
+    "stone", "storm", "stream", "stripe", "thistle", "thorn", "water", "weed", "willow", "wind"
+]
+non_local_names = [
     "Adder", "Buzzard", "Fallow", "Ferret", "Furze", "Gorse", "Heather", "Kite", "Rook", "Sloe", "Thrift"
 ]
-non_local_suffixes = [
-    "gorse"
+nono = [
+    "blackface", "brownface", "cloudeye", "fogeye", "foxheart", "misteye", "mistyeye", "molesting", "mouseheart",
+    "quicknut", "redface", "smokeweed", "weedsmoke", "whiteeye", "yellowface"
 ]
 
 # CONFIG
@@ -77,18 +109,26 @@ forced_prefix = ""
 forced_suffix = ""
 no_double_letter = True  # No double-letter names (e.g., Mossstar, Oliveear, Hailleaf, etc.)
 amount = 3  # Amount of names to generate
+prefix_suffix_swap = False  # Most prefixes are added to the suffix list, and vice versa
 exclude_non_local_names = False  # This is mainly just for myself - will apply to anyone else living in PA (and prob
 # nearby states) though
 
+if prefix_suffix_swap is True:
+    for prefix in swap_able_prefixes:
+        if prefix.lower() not in suffixes:
+            suffixes.append(prefix.lower())
+    for suffix in swap_able_suffixes:
+        if suffix.capitalize() not in prefixes:
+            prefixes.append(suffix.capitalize())
+
 if exclude_non_local_names is True:
-    for prefix in non_local_prefixes:
-        if prefix in prefixes:
-            while prefix in prefixes:
-                prefixes.remove(prefix)
-    for suffix in non_local_suffixes:
-        if suffix in suffixes:
-            while suffix in suffixes:
-                suffixes.remove(suffix)
+    for name in non_local_names:
+        if name in prefixes:
+            while name in prefixes:
+                prefixes.remove(name)
+        if name.lower() in suffixes:
+            while name.lower() in suffixes:
+                suffixes.remove(name.lower())
 
 if no_double_letter is True:
     for prefix in prefixes:
@@ -124,11 +164,15 @@ for i in range(amount):
         chosen_suffix = forced_suffix
         while chosen_prefix.lower() == chosen_suffix or (
                 no_double_letter is True and (chosen_prefix[-1] == chosen_suffix[0])
+        ) or (
+            f"{chosen_prefix.lower()}{chosen_suffix}" in nono
         ):
             chosen_prefix = choice(prefixes)
     else:
         while chosen_suffix == chosen_prefix.lower() or (
                 no_double_letter is True and (chosen_prefix[-1] == chosen_suffix[0])
+        ) or (
+            f"{chosen_prefix.lower()}{chosen_suffix}" in nono
         ):
             chosen_suffix = choice(suffixes)
 
